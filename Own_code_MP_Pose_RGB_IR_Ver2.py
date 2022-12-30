@@ -1,8 +1,5 @@
-#!/usr/bin/env python
+  #!/usr/bin/env python
 # coding: utf-8
-
-# In[1]:
-
 
 import cv2
 import mediapipe as mp
@@ -14,17 +11,9 @@ from time import time
 import matplotlib.pyplot as plt
 from cmath import inf
 
-
-# In[2]:
-
-
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_pose = mp.solutions.pose    
-
-
-# In[3]:
-
 
 # For videos
 # Variables video file specific
@@ -45,33 +34,8 @@ video_file_ir = "C:\\Users\\User\\Desktop\\VideosEdited\\ir071222ath.mp4"
 #video_location = 
 
 #cv2.imshow('Test Image',test_img )
-
-
 # use this to "cut" the video by setting start and end frame
 #relevant_frame_list = [[0, inf] for i in range(len(list_of_names))]
-
-
-# In[4]:
-
-
-body_parts = ('NOSE','LEFT_EYE_INNER','LEFT_EYE','LEFT_EYE_OUTER','RIGHT_EYE_INNER',
-              'RIGHT_EYE','RIGHT_EYE_OUTER','LEFT_EAR','RIGHT_EAR','MOUTH_LEFT','MOUTH_RIGHT',
-              'LEFT_SHOULDER','RIGHT_SHOULDER','LEFT_ELBOW','RIGHT_ELBOW','LEFT_WRIST',
-              'RIGHT_WRIST','LEFT_PINKY','RIGHT_PINKY','LEFT_INDEX','RIGHT_INDEX','LEFT_THUMB',
-              'RIGHT_THUMB','LEFT_HIP','RIGHT_HIP','LEFT_KNEE','RIGHT_KNEE','LEFT_ANKLE',
-              'RIGHT_ANKLE','LEFT_HEEL','RIGHT_HEEL','LEFT_FOOT_INDEX','RIGHT_FOOT_INDEX')
-
-#mpPL = mp_pose.PoseLandmark
-#rgb_bp=getattr(body_parts)
-rgb_bp_dict = {}
-ir_bp_dict = {}
-dif_bp_dict = {}
-rgb_frame_nr=0
-ir_frame_nr=0
-
-
-# In[5]:
-
 
 pose_rgb = mp_pose.Pose(
     static_image_mode=False,
@@ -94,10 +58,6 @@ pose = mp_pose.Pose(
     min_detection_confidence=0.5,
     smooth_landmarks=True,
     min_tracking_confidence=0.5)
-
-
-# In[ ]:
-
 
 # one selected video to test
 #video_location = video_file
@@ -172,26 +132,12 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
                                     mp_drawing.DrawingSpec(color=(245,66,230), thickness=2, circle_radius=2) 
                                         )
             
-            for bp_string in body_parts:
-                bp=getattr(mp_pose.PoseLandmark, bp_string)
-                rgb_bp_dict[bp_string]=[landmarks_rgb[bp.value].x, landmarks_rgb[bp.value].y, landmarks_rgb[bp.value].z] 
-                #rgb_bp_dict[bp_string].append()
-                #print(rgb_bp_dict[bp_string])
-    
-                ir_bp_dict[bp_string]=[landmarks_ir[bp.value].x, landmarks_ir[bp.value].y, landmarks_ir[bp.value].z]
-                #ir_bp_dict[bp_string].append()
-                #print(ir_bp_dict[bp_string])
-    
-                #for key in rgb_bp_dict and ir_bp_dict
-                dif_bp_dict[bp_string]=np.subtract(rgb_bp_dict[bp_string], ir_bp_dict[bp_string])
-                #dif_bp_dict[bp_string].append()
-                #out.write(image_rgb)
-                print(dif_bp_dict[bp_string],bp_string)
-                print(rgb_frame_nr, ir_frame_nr)
-                        
-        #return VideoFileClip(video_folder)
-        cv2.imshow('Mediapipe Feed', image_rgb)
-        cv2.imshow('Mediapipe Feed', image_ir)
+            BodyParts(landmarks_rgb, landmarks_ir)
+                       
+			#return VideoFileClip(video_folder)
+			cv2.imshow('Mediapipe Feed', image_rgb, image_ir)
+			#cv2.imshow('Mediapipe Feed', image_ir)
+		df=pd.DataFrame(dif_bp_dict[bp_string])
         if cv2.waitKey(10) & 0xFF == ord('q'):
             break
             
