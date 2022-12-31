@@ -1,4 +1,4 @@
-  #!/usr/bin/env python
+   #!/usr/bin/env python
 # coding: utf-8
 
 import cv2
@@ -10,6 +10,8 @@ import pandas as pd
 from time import time
 import matplotlib.pyplot as plt
 from cmath import inf
+from BodyParts import BodyParts
+import pprint
 
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
@@ -25,6 +27,9 @@ mp_pose = mp.solutions.pose
 video_folder = "C:\\Users\\User\\Desktop\\VideosEdited"
 video_file_rgb = "C:\\Users\\User\\Desktop\\VideosEdited\\071222a.mp4"#ir071222ath.mp4
 video_file_ir = "C:\\Users\\User\\Desktop\\VideosEdited\\ir071222ath.mp4"
+FrameDataAll = []
+rgb_frame_nr=0
+ir_frame_nr=0
 
 #all_videos = False # True means that you want to process all videos in the folder
 #video_type = ".avi", ".ravi", ".mp4", ".wmv", ".mov" # Only files with this ending will be processed
@@ -116,8 +121,6 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
                 landmarks_ir = results_ir.pose_landmarks.landmark
                 #print(landmarks_rgb)
                 #out.write(image_rgb)
-                #cv2.imshow('Mediapipe Feed', image_rgb)
-                #cv2.imshow('Mediapipe Feed', image_ir)
             except:
                 pass
         
@@ -132,12 +135,14 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
                                     mp_drawing.DrawingSpec(color=(245,66,230), thickness=2, circle_radius=2) 
                                         )
             
-            BodyParts(landmarks_rgb, landmarks_ir)
-                       
-			#return VideoFileClip(video_folder)
-			cv2.imshow('Mediapipe Feed', image_rgb, image_ir)
-			#cv2.imshow('Mediapipe Feed', image_ir)
-		df=pd.DataFrame(dif_bp_dict[bp_string])
+            #BP_Difs = BodyParts(landmarks_rgb, landmarks_ir)
+            if rgb_frame_nr%100==0:
+                print(rgb_frame_nr, ir_frame_nr)
+            FrameDataAll.append(BodyParts(landmarks_rgb, landmarks_ir))
+            #return VideoFileClip(video_folder
+            #cv2.imshow('Mediapipe Feed', image_rgb)
+            #cv2.imshow('Mediapipe Feed', image_ir)
+            #df=pd.DataFrame(dif_bp_dict[bp_string])
         if cv2.waitKey(10) & 0xFF == ord('q'):
             break
             
@@ -145,5 +150,4 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
         cap_ir.release()
     cv2.destroyAllWindows()
     print(length_rgb, length_ir)
-    
-
+pprint.pprint(FrameDataAll)
