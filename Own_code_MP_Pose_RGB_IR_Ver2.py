@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 from cmath import inf
 from BodyParts import BodyParts
 import pprint
+import csv 
 
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
@@ -27,9 +28,33 @@ mp_pose = mp.solutions.pose
 video_folder = "C:\\Users\\User\\Desktop\\VideosEdited"
 video_file_rgb = "C:\\Users\\User\\Desktop\\VideosEdited\\071222a.mp4"#ir071222ath.mp4
 video_file_ir = "C:\\Users\\User\\Desktop\\VideosEdited\\ir071222ath.mp4"
+
 FrameDataAll = []
 rgb_frame_nr=0
 ir_frame_nr=0
+
+
+#########################
+# CSV Preparation
+#########################
+#Splitting X, Y and Z coordinates of each body part to be dsaved in a csv file
+# TODO: CLOSE CSV FILE
+def CSV_header_generation():
+    body_parts = ('NOSE','LEFT_EYE_INNER','LEFT_EYE','LEFT_EYE_OUTER','RIGHT_EYE_INNER',
+                'RIGHT_EYE','RIGHT_EYE_OUTER','LEFT_EAR','RIGHT_EAR','MOUTH_LEFT','MOUTH_RIGHT','LEFT_SHOULDER',
+                'RIGHT_SHOULDER','LEFT_ELBOW','RIGHT_ELBOW','LEFT_WRIST','RIGHT_WRIST','LEFT_PINKY','RIGHT_PINKY',
+                'LEFT_INDEX','RIGHT_INDEX','LEFT_THUMB','RIGHT_THUMB','LEFT_HIP','RIGHT_HIP','LEFT_KNEE','RIGHT_KNEE',
+                'LEFT_ANKLE','RIGHT_ANKLE','LEFT_HEEL','RIGHT_HEEL','LEFT_FOOT_INDEX','RIGHT_FOOT_INDEX')
+    bp_csv_prep_fieldnames=[]
+    csvfile = open('BodyPartsDifs.csv', 'w', newline='')
+    for bp in body_parts:
+        bp_csv_prep_fieldnames.extend([bp+"_x", bp+"_y", bp+"_z"])
+    writer = csv.DictWriter(csvfile, fieldnames=bp_csv_prep_fieldnames)
+    print (bp_csv_prep_fieldnames)
+    writer.writeheader()
+    return writer
+
+writer = CSV_header_generation()
 
 #all_videos = False # True means that you want to process all videos in the folder
 #video_type = ".avi", ".ravi", ".mp4", ".wmv", ".mov" # Only files with this ending will be processed
@@ -138,7 +163,7 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
             #BP_Difs = BodyParts(landmarks_rgb, landmarks_ir)
             if rgb_frame_nr%100==0:
                 print(rgb_frame_nr, ir_frame_nr)
-            FrameDataAll.append(BodyParts(landmarks_rgb, landmarks_ir))
+            FrameDataAll.append(BodyParts(landmarks_rgb, landmarks_ir, writer))
             #return VideoFileClip(video_folder
             #cv2.imshow('Mediapipe Feed', image_rgb)
             #cv2.imshow('Mediapipe Feed', image_ir)

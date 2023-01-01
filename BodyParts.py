@@ -15,7 +15,7 @@ from cmath import inf
 
 
 
-def BodyParts(landmarks_rgb,landmarks_ir):
+def BodyParts(landmarks_rgb,landmarks_ir, writer = None):
     mp_drawing = mp.solutions.drawing_utils
     mp_drawing_styles = mp.solutions.drawing_styles
     mp_pose = mp.solutions.pose 
@@ -33,6 +33,8 @@ def BodyParts(landmarks_rgb,landmarks_ir):
     dif_bp_dict = {}
     rgb_frame_nr=0
     ir_frame_nr=0
+    bp_csv_prep={}
+    bp_csv_prep_fieldnames=[]
 
     for bp_string in body_parts:
             bp=getattr(mp_pose.PoseLandmark, bp_string)
@@ -48,4 +50,21 @@ def BodyParts(landmarks_rgb,landmarks_ir):
             #dif_bp_dict[bp_string].append()
             #out.write(image_rgb)
             #print(dif_bp_dict[bp_string],bp_string)
+            
+            #########################
+            # CSV Preparation
+            #########################
+            #Splitting X, Y and Z coordinates of each body part to be dsaved in a csv file
+            for idx, pos in enumerate (dif_bp_dict[bp_string]):
+                pos_string=None
+                if idx == 0:
+                    pos_string = "x"
+                elif idx == 1:
+                    pos_string = "y"
+                elif idx == 2:
+                    pos_string = "z"
+                fieldname = "{}_{}".format(bp_string, pos_string)
+                bp_csv_prep_fieldnames.append(fieldname)
+                bp_csv_prep[fieldname]=pos
+            writer.writerow(bp_csv_prep)
     return dif_bp_dict
