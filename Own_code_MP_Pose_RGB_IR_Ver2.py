@@ -1,5 +1,7 @@
    #!/usr/bin/env python
 # coding: utf-8
+# Main Code 
+# Computing and saving the lansmarks and difs into csv 
 
 import cv2
 import mediapipe as mp
@@ -27,7 +29,7 @@ mp_pose = mp.solutions.pose
 
 video_folder = "C:\\Users\\User\\Desktop\\VideosEdited"
 video_file_rgb = "C:\\Users\\User\\Desktop\\VideosEdited\\071222a.mp4"#ir071222ath.mp4
-video_file_ir = "C:\\Users\\User\\Desktop\\VideosEdited\\ir071222ath.mp4"
+video_file_ir = "C:\\Users\\User\\Desktop\\VideosEdited\\ir071222athBW.mp4" #ir071222ath.mp4"
 
 FrameDataAll = []
 rgb_frame_nr=0
@@ -55,17 +57,6 @@ def CSV_header_generation():
     return writer
 
 writer = CSV_header_generation()
-
-#all_videos = False # True means that you want to process all videos in the folder
-#video_type = ".avi", ".ravi", ".mp4", ".wmv", ".mov" # Only files with this ending will be processed
-#test_img = cv2.imread(video_file)
-#BG_COLOR = (8,14,75) # blue
-#BG_COLOR = (192,192,192) # gray
-#video_location = 
-
-#cv2.imshow('Test Image',test_img )
-# use this to "cut" the video by setting start and end frame
-#relevant_frame_list = [[0, inf] for i in range(len(list_of_names))]
 
 pose_rgb = mp_pose.Pose(
     static_image_mode=False,
