@@ -38,7 +38,7 @@ mp_pose = mp.solutions.pose
 # use this to "cut" the video by setting start and end frame
 #relevant_frame_list = [[0, inf] for i in range(len(list_of_names))]
 
-out = cv.VideoWriter('C:\\Users\\User\\Desktop\\VideosEdited\\RGBLandmarks.wmv', cv.VideoWriter_fourcc('m', 'j', 'p', 'g'), 20.0, (640,480))
+out = cv.VideoWriter('C:\\Users\\User\\Desktop\\VideosEdited\\RGBLandmarks.mp4', cv.VideoWriter_fourcc(*'avc1'), 20.0, (1920,1080))
 
 video_folder = "C:\\Users\\User\\Desktop\\VideosEdited"
 video_file_rgb = "C:\\Users\\User\\Desktop\\VideosEdited\\071222a.mp4"#ir071222ath.mp4
@@ -137,11 +137,14 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
         cv.putText(image_rgb, str(rgb_frame_nr), 
                     (10,60), 
                     cv.FONT_HERSHEY_SIMPLEX, 2, (255,255,255), 2, cv.LINE_AA)
-        cv.imshow('Mediapipe Feed RGB', image_rgb)
-        cv.imshow('Mediapipe Feed IR', image_ir)
+                    
+        if retrgb:
+            out.write(image_rgb)
+            cv.imshow('Mediapipe Feed RGB', image_rgb)
+            cv.imshow('Mediapipe Feed IR', image_ir)
         if cv.waitKey(10) & 0xFF == ord('q'):
            break
-        out.write(frame)       
+    out.release()
     cap_rgb.release()
     cap_ir.release()
     cv.destroyAllWindows()
