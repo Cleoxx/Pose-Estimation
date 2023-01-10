@@ -44,7 +44,6 @@ def BodyParts(landmarks_rgb,landmarks_ir, writer = None):
             ir_bp_dict[bp_string]=[landmarks_ir[bp.value].x, landmarks_ir[bp.value].y, landmarks_ir[bp.value].z]
             #ir_bp_dict[bp_string].append()
             #print(ir_bp_dict[bp_string])
-    
             #for key in rgb_bp_dict and ir_bp_dict
             dif_bp_dict[bp_string]=np.subtract(rgb_bp_dict[bp_string], ir_bp_dict[bp_string])
             #dif_bp_dict[bp_string].append()
@@ -66,5 +65,5 @@ def BodyParts(landmarks_rgb,landmarks_ir, writer = None):
                 fieldname = "{}_{}".format(bp_string, pos_string)
                 bp_csv_prep_fieldnames.append(fieldname)
                 bp_csv_prep[fieldname]=pos
-            writer.writerow(bp_csv_prep)
+    writer.writerow(bp_csv_prep)
     return dif_bp_dict

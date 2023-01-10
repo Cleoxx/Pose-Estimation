@@ -83,9 +83,9 @@ cap_rgb=cv.VideoCapture(video_file_rgb)
 cap_ir=cv.VideoCapture(video_file_ir)
 
 ## Setup mediapipe instance
-pose = mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5)
+# pose = mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5)
 while cap_rgb.isOpened():
-    retrgb, frame = cap_rgb.read()
+    ret_rgb, frame = cap_rgb.read()
     ret_ir, frame_ir = cap_ir.read()
 
     #get frame width and height RGB
@@ -98,7 +98,7 @@ while cap_rgb.isOpened():
     length_ir = int(cap_ir.get(cv.CAP_PROP_FRAME_COUNT))
     if rgb_frame_nr<length_rgb:
         print(rgb_frame_nr)
-        print(length_rgb)
+        #print(length_rgb)
         # Recolor image to RGB
         rgb_frame_nr+=1
         ir_frame_nr+=1
@@ -150,12 +150,12 @@ while cap_rgb.isOpened():
                 (10,60), 
                 cv.FONT_HERSHEY_SIMPLEX, 2, (255,255,255), 2, cv.LINE_AA)
             
-        if retrgb:
+        if ret_rgb:
         #out.write(image_rgb)
             out.write(image_rgb)
             cv.imshow('Mediapipe Feed RGB', image_rgb)
             #cv.imshow('Mediapipe Feed IR', image_ir)
-        if cv.waitKey(10) & 0xFF == ord('q'):
+        if cv.waitKey(1) & 0xFF == ord('q'):
             break
     else:
         cap_rgb.release()
