@@ -45,7 +45,7 @@ def BodyParts(landmarks_rgb,landmarks_ir, writer = None):
             #ir_bp_dict[bp_string].append()
             #print(ir_bp_dict[bp_string])
             #for key in rgb_bp_dict and ir_bp_dict
-            dif_bp_dict[bp_string]=np.subtract(rgb_bp_dict[bp_string], ir_bp_dict[bp_string])
+            dif_bp_dict[bp_string]=np.absolute(np.subtract(rgb_bp_dict[bp_string], ir_bp_dict[bp_string]))
             #dif_bp_dict[bp_string].append()
             #out.write(image_rgb)
             #print(dif_bp_dict[bp_string],bp_string)

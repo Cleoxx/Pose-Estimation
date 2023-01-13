@@ -21,7 +21,7 @@ mp_drawing_styles = mp.solutions.drawing_styles
 mp_pose = mp.solutions.pose
 
 video_folder = "C:\\Users\\User\\Desktop\\VideosEdited"
-video_file_rgb = "C:\\Users\\User\\Desktop\\VideosEdited\\TEST_RGBa.mp4" #ir071222ath.mp4
+video_file_rgb = "C:\\Users\\User\\Desktop\\VideosEdited\\TEST_RGBa.mp4" #ir071222ath.mp4 #071222a
 video_file_ir = "C:\\Users\\User\\Desktop\\VideosEdited\\TEST_IRa.mp4" #ir071222athBW.mp4"
 
 FrameDataAll = []
@@ -154,7 +154,7 @@ while cap_rgb.isOpened():
         #out.write(image_rgb)
             out.write(image_rgb)
             cv.imshow('Mediapipe Feed RGB', image_rgb)
-            #cv.imshow('Mediapipe Feed IR', image_ir)
+            cv.imshow('Mediapipe Feed IR', image_ir)
         if cv.waitKey(1) & 0xFF == ord('q'):
             break
     else:
@@ -164,3 +164,5 @@ out.release()
 cv.destroyAllWindows()
 print(length_rgb, length_ir)
 pprint.pprint(FrameDataAll)
+df = pd.read_csv('C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\BodyPartsDifs.csv')
+print(df)
