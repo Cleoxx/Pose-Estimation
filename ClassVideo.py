@@ -1,27 +1,44 @@
 import mediapipe as mp
 import cv2
+import csv
+import matplotlib.pyplot as plt
 
-
-mp_pose = mp.solutions.pose
 
 
 class Video:
-
+    body_parts = ('NOSE','LEFT_EYE_INNER','LEFT_EYE','LEFT_EYE_OUTER','RIGHT_EYE_INNER',
+                'RIGHT_EYE','RIGHT_EYE_OUTER','LEFT_EAR','RIGHT_EAR','MOUTH_LEFT','MOUTH_RIGHT','LEFT_SHOULDER',
+                'RIGHT_SHOULDER','LEFT_ELBOW','RIGHT_ELBOW','LEFT_WRIST','RIGHT_WRIST','LEFT_PINKY','RIGHT_PINKY',
+                'LEFT_INDEX','RIGHT_INDEX','LEFT_THUMB','RIGHT_THUMB','LEFT_HIP','RIGHT_HIP','LEFT_KNEE','RIGHT_KNEE',
+                'LEFT_ANKLE','RIGHT_ANKLE','LEFT_HEEL','RIGHT_HEEL','LEFT_FOOT_INDEX','RIGHT_FOOT_INDEX')
+    mp_pose = mp.solutions.pose
     mp_drawing = mp.solutions.drawing_utils
     #mp_drawing_styles = mp.solutions.drawing_styles
 
-    def __init__(self, spec, video_file):
+    def __init__(self, spec, video_file, csvfile):
         self.spec = spec
         self.video_file = video_file
-        self.pose = mp_pose.Pose(static_image_mode=False,
+        self.pose = Video.mp_pose.Pose(static_image_mode=False,
                                 model_complexity=2,
                                 enable_segmentation=True,
                                 min_detection_confidence=0.5,
                                 smooth_landmarks=True,
                                 min_tracking_confidence=0.5)
+        self.csvfile = csvfile
+        self.CSV_header_generation()
+    
+    def CSV_header_generation(self):
+        bp_csv_prep_fieldnames=[]
+        csvfile = open(self.csvfile, 'w', newline='')
+        for bp in Video.body_parts:
+            bp_csv_prep_fieldnames.extend([bp+"_x", bp+"_y", bp+"_z"])
+        writer = csv.DictWriter(csvfile, fieldnames=bp_csv_prep_fieldnames)
+        #print (bp_csv_prep_fieldnames)
+        writer.writeheader()
+        self.writer=writer
 
     def draw_landmarks(self, results):
-        self.mp_drawing.draw_landmarks(self.image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
+        self.mp_drawing.draw_landmarks(self.image, results.pose_landmarks, Video.mp_pose.POSE_CONNECTIONS,
                                 self.mp_drawing.DrawingSpec(color=(245,117,66), thickness=2, circle_radius=2), 
                                 self.mp_drawing.DrawingSpec(color=(245,66,230), thickness=2, circle_radius=2) 
                                     )
@@ -41,11 +58,25 @@ class Video:
         self.image = cv2.cvtColor(self.image, cv2.COLOR_RGB2BGR)
         return results
     def extract_landmarks(self, results):
-        try:
-            landmarks=results.pose_landmarks.landmark
-        except:
-            pass
-        
+        landmarks=results.pose_landmarks.landmark
+        return landmarks
+    def writerow(self, landmarks):
+        bp_dict={}
+        for bp_string in Video.body_parts:
+            bp=getattr(Video.mp_pose.PoseLandmark, bp_string)
+            bp_dict[bp_string+"_x"]=landmarks[bp.value].x
+            bp_dict[bp_string+"_y"]=landmarks[bp.value].y
+            bp_dict[bp_string+"_z"]=landmarks[bp.value].z
+            #self.plot([landmarks[bp.value].x, landmarks[bp.value].y, landmarks[bp.value].z])
+        self.writer.writerow(bp_dict)
+    def plot(self, pos):
+        # WORK IN PROGRESS 
+        figure = plt.figure()
+        ax = figure.add_subplot(111, projection = "3d")
+        ax.plot(pos[0], pos[1], pos[2])
+        figure.show()
+        print(pos)
+        deleteme = input()
     def draw_frame_counter(self, frame_nr):
         cv2.rectangle(self.image, (0,0), (225,73), (245,117,16), -1)
         cv2.putText(self.image, 'FRAME', (15,12), 
@@ -68,7 +99,12 @@ class Video:
                 frame_nr+=1
                 results = self.image_detection(frame)
                 self.draw_landmarks(results)
-                self.extract_landmarks(results)
+                try:
+                    landmarks = self.extract_landmarks(results)
+                    self.writerow(landmarks)
+                except Exception as e:
+                    print (e)
+                    pass
                 self.draw_frame_counter(frame_nr)
                 if ret:
                     self.show_write_video()
@@ -82,7 +118,7 @@ class Video:
 
 
 
-Video_RGB = Video('RGB', "C:\\Users\\User\\Desktop\\VideosEdited\\TEST_RGBa.mp4")
+Video_RGB = Video('RGB', "C:\\Users\\User\\Desktop\\VideosEdited\\TEST_RGBa.mp4", "C:\\Users\\User\\Desktop\\VideosEdited\\Landmarks_RGB.csv")
 #Video_IR = Video('IR', "C:\\Users\\User\\Desktop\\VideosEdited\\TEST_IRa.mp4")
 #Video_IR_BW = Video('IR_BW', "C:\\Users\\User\\Desktop\\VideosEdited\\TEST_BW.mp4")
 
