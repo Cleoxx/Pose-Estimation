@@ -1,20 +1,26 @@
 import cv2 as cv
 import mediapipe as mp
 import numpy as np
-import os
-import math
 import pandas as pd
-from time import time
-import matplotlib.pyplot as plt
-from cmath import inf
-from BodyParts import BodyParts
-import pprint
-import csv 
+
+###################
+# READ Landmark FILES
+###################
 
 
+df_RGB = pd.read_csv('C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_RGB.csv')
+df_IR = pd.read_csv('C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_IR.csv')
+df_IR_BW = pd.read_csv('C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_IR_BW.csv')
+print(df_RGB)
+
+###############
+# DIF und Betrag 
+################
+# von RGB und IR 
+df_dif_RGB_IR = df_RGB.subtract(df_IR)
+df_dif_RGB_IR = df_dif_RGB_IR.abs()
 
 
-
-
-df = pd.read_csv('C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\BodyPartsDifs.csv')
-print(df)
+# von RGB und IR BW 
+df_dif_RGB_IR_BW = df_RGB.subtract(df_IR_BW)
+df_dif_RGB_IR_BW = df_dif_RGB_IR_BW.abs()

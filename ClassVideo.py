@@ -47,7 +47,7 @@ class Video:
         self.frame_width = int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         self.frame_height = int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         self.length = int(self.cap.get(cv2.CAP_PROP_FRAME_COUNT))
-        self.out = cv2.VideoWriter('C:\\Users\\User\\Desktop\\VideosEdited\\{}_Landmarks.mp4'.format(self.spec),
+        self.out = cv2.VideoWriter('C:\\Users\\User\\Desktop\\VideosEdited\\Output_Videos\\{}_Landmarks.mp4'.format(self.spec),
                                     cv2.VideoWriter_fourcc(*'avc1'), 20.0, 
                                     (self.frame_width,self.frame_height))
     def image_detection(self, frame):
@@ -118,10 +118,11 @@ class Video:
 
 
 
-Video_RGB = Video('RGB', "C:\\Users\\User\\Desktop\\VideosEdited\\TEST_RGBa.mp4", "C:\\Users\\User\\Desktop\\VideosEdited\\Landmarks_RGB.csv")
-#Video_IR = Video('IR', "C:\\Users\\User\\Desktop\\VideosEdited\\TEST_IRa.mp4")
-#Video_IR_BW = Video('IR_BW', "C:\\Users\\User\\Desktop\\VideosEdited\\TEST_BW.mp4")
+Video_RGB = Video('RGB', "C:\\Users\\User\\Desktop\\VideosEdited\\TEST_RGBa.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_RGB.csv")
+Video_IR = Video('IR', "C:\\Users\\User\\Desktop\\VideosEdited\\TEST_IRa.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_IR.csv")
+Video_IR_BW = Video('IR_BW', "C:\\Users\\User\\Desktop\\VideosEdited\\TEST_BW.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_IR_BW.csv")
 
 
 Video_RGB.process_Video()
-
+Video_IR.process_Video()
+Video_IR_BW.process_Video()
