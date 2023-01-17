@@ -118,11 +118,13 @@ class Video:
 
 
 
-Video_RGB = Video('RGB', "C:\\Users\\User\\Desktop\\VideosEdited\\TEST_RGBa.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_RGB.csv")
-Video_IR = Video('IR', "C:\\Users\\User\\Desktop\\VideosEdited\\TEST_IRa.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_IR.csv")
-Video_IR_BW = Video('IR_BW', "C:\\Users\\User\\Desktop\\VideosEdited\\TEST_BW.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_IR_BW.csv")
+Video_RGB = Video('RGB', "C:\\Users\\User\\Desktop\\VideosEdited\\TEST_RGBa.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_RGB.csv")#071222a.mp4
+Video_IR = Video('IR', "C:\\Users\\User\\Desktop\\VideosEdited\\TEST_IRa.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_IR.csv")#ir071222ath.mp4
+Video_IR_BW = Video('IR_BW', "C:\\Users\\User\\Desktop\\VideosEdited\\TEST_BW.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_IR_BW.csv")#TODO with 30fps
+Video_IR_RED = Video('IR_RED', "C:\\Users\\User\\Desktop\\VideosEdited\\TEST_RED.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_IR_RED.csv") #ir071222athred.mp4
 
 
 Video_RGB.process_Video()
 Video_IR.process_Video()
 Video_IR_BW.process_Video()
+Video_IR_RED.process_Video()
