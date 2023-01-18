@@ -118,13 +118,15 @@ class Video:
 
 
 
-Video_RGB = Video('RGB', "C:\\Users\\User\\Desktop\\VideosEdited\\TEST_RGBa.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_RGB.csv")#071222a.mp4
-Video_IR = Video('IR', "C:\\Users\\User\\Desktop\\VideosEdited\\TEST_IRa.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_IR.csv")#ir071222ath.mp4
-Video_IR_BW = Video('IR_BW', "C:\\Users\\User\\Desktop\\VideosEdited\\TEST_BW.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_IR_BW.csv")#TODO with 30fps
-Video_IR_RED = Video('IR_RED', "C:\\Users\\User\\Desktop\\VideosEdited\\TEST_RED.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_IR_RED.csv") #ir071222athred.mp4
+Video_RGB = Video('RGB', "C:\\Users\\User\\Desktop\\VideosEdited\\071222a.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_RGB.csv")#071222a.mp4, TEST_RGBa.mp4
+Video_IR = Video('IR', "C:\\Users\\User\\Desktop\\VideosEdited\\ir071222ath.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_IR.csv")#ir071222ath.mp4, TEST_IRa.mp4
+Video_IR_BW = Video('IR_BW', "C:\\Users\\User\\Desktop\\VideosEdited\\071222athBW", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_IR_BW.csv")#071222athBW, TEST_BW.mp4
+Video_IR_RED = Video('IR_RED', "C:\\Users\\User\\Desktop\\VideosEdited\\ir071222athred.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_IR_RED.csv") #ir071222athred.mp4, TEST_RED.mp4
+Video_IR_HC = Video('IR_HC', "C:\\Users\\User\\Desktop\\VideosEdited\\ir071222athHC.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_IR_HC.csv") #ir071222athHC.mp4, TEST_HC.mp4
 
 
 Video_RGB.process_Video()
 Video_IR.process_Video()
 Video_IR_BW.process_Video()
 Video_IR_RED.process_Video()
+Video_IR_HC.process_Video()
