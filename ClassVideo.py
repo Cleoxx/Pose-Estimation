@@ -1,7 +1,7 @@
 import mediapipe as mp
 import cv2
 import csv
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
 
 
@@ -31,12 +31,12 @@ class Video:
         bp_csv_prep_fieldnames=[]
         csvfile = open(self.csvfile, 'w', newline='')
         for bp in Video.body_parts:
-            bp_csv_prep_fieldnames.extend([bp+"_x", bp+"_y", bp+"_z"])
+            bp_csv_prep_fieldnames.extend([bp+"_x", bp+"_y", bp+"_z", bp+"_visibility"])
         writer = csv.DictWriter(csvfile, fieldnames=bp_csv_prep_fieldnames)
         #print (bp_csv_prep_fieldnames)
         writer.writeheader()
         self.writer=writer
-
+        
     def draw_landmarks(self, results):
         self.mp_drawing.draw_landmarks(self.image, results.pose_landmarks, Video.mp_pose.POSE_CONNECTIONS,
                                 self.mp_drawing.DrawingSpec(color=(245,117,66), thickness=2, circle_radius=2), 
