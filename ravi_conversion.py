@@ -22,8 +22,8 @@ class Ravi:
         self.frame_height = int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         self.length = int(self.cap.get(cv2.CAP_PROP_FRAME_COUNT))
         self.frame_nr = int(self.cap.get(cv2.CAP_PROP_POS_FRAMES))
-        self.out = cv2.VideoWriter('C:\\Users\\User\\Desktop\\VideosEdited\\Ravi_bearbeitet\\Ravi_{}.mp4'.format(self.spec).mp4',
-                                    cv2.VideoWriter_fourcc(*'avc1'), 20.0, 
+        self.out = cv2.VideoWriter('C:\\Users\\User\\Desktop\\VideosEdited\\Ravi_bearbeitet\\Ravi_{}.mp4'.format(self.spec),
+                                    cv2.VideoWriter_fourcc(*'avc1'), 60.0, 
                                     (self.frame_width,self.frame_height), False)#
     def norming (self, frame) :
         # Normalizing frame to range [0, 255], and get the result as type uint8 (this part is used just for making the data visible).
