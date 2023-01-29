@@ -37,8 +37,8 @@ class Video:
         writer.writeheader()
         self.writer=writer
         
-    def draw_landmarks(self, results):
-        self.mp_drawing.draw_landmarks(self.frame, results.pose_landmarks, Video.mp_pose.POSE_CONNECTIONS,
+    def draw_landmarks(self, results, frame):
+        self.mp_drawing.draw_landmarks(frame, results.pose_landmarks, Video.mp_pose.POSE_CONNECTIONS,
                                 self.mp_drawing.DrawingSpec(color=(245,117,66), thickness=2, circle_radius=2), 
                                 self.mp_drawing.DrawingSpec(color=(245,66,230), thickness=2, circle_radius=2) 
                                     )
@@ -50,10 +50,10 @@ class Video:
         self.out = cv2.VideoWriter('C:\\Users\\User\\Desktop\\VideosEdited\\Output_Videos\\{}_Landmarks.mp4'.format(self.spec),
                                     cv2.VideoWriter_fourcc(*'avc1'), 20.0, 
                                     (self.frame_width,self.frame_height))
-    def image_detection(self):#, frame
+    def image_detection(self, frame):#, frame
         #self.image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         #self.image.flags.writeable = False
-        results = self.pose.process(self.frame)
+        results = self.pose.process(frame)
         #self.image.flags.writeable = True
         #self.image = cv2.cvtColor(self.image, cv2.COLOR_RGB2BGR)
         return results
@@ -77,15 +77,15 @@ class Video:
         figure.show()
         print(pos)
         deleteme = input()
-    def draw_frame_counter(self, frame_nr):
-        cv2.rectangle(self.frame, (0,0), (225,73), (245,117,16), -1)
-        cv2.putText(self.frame, 'FRAME', (15,12), 
+    def draw_frame_counter(self, frame, frame_nr):
+        cv2.rectangle(frame, (0,0), (225,73), (245,117,16), -1)
+        cv2.putText(frame, 'FRAME', (15,12), 
                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 1, cv2.LINE_AA)
-        cv2.putText(self.frame, str(frame_nr), (10,60), 
+        cv2.putText(frame, str(frame_nr), (10,60), 
                 cv2.FONT_HERSHEY_SIMPLEX, 2, (255,255,255), 2, cv2.LINE_AA)
-    def show_write_video(self):
-        self.out.write(self.frame)
-        cv2.imshow('Mediapipe Feed', self.frame)
+    def show_write_video(self, frame):
+        self.out.write(frame)
+        cv2.imshow('Mediapipe Feed', frame)
     def close(self):
         self.out.release()
         cv2.destroyAllWindows()
@@ -94,20 +94,20 @@ class Video:
         frame_nr = 0
         self.get_video_specs()
         while self.cap.isOpened():
-            ret, self.frame = self.cap.read()
+            ret, frame = self.cap.read()
             if frame_nr<self.length:
                 frame_nr+=1
-                results = self.image_detection()#frame
-                self.draw_landmarks(results)
+                results = self.image_detection(frame)
+                self.draw_landmarks(results, frame)
                 try:
                     landmarks = self.extract_landmarks(results)
                     self.writerow(landmarks)
                 except Exception as e:
                     print (e)
                     pass
-                self.draw_frame_counter(frame_nr)
+                self.draw_frame_counter(frame, frame_nr)
                 if ret:
-                    self.show_write_video()
+                    self.show_write_video(frame)
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
             else:
