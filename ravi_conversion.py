@@ -25,7 +25,7 @@ class Ravi:
         fps = int(self.cap.get(cv2.CAP_PROP_FPS))
         self.out = cv2.VideoWriter('C:\\Users\\User\\Desktop\\VideosEdited\\Ravi_bearbeitet\\Ravi_{}.mp4'.format(self.spec),
                                     cv2.VideoWriter_fourcc(*'avc1'), fps, 
-                                    (self.frame_width,self.frame_height), False)#
+                                    (self.frame_width,self.frame_height), False)
     def norming (self, frame) :
         # Normalizing frame to range [0, 255], and get the result as type uint8 (this part is used just for making the data visible).
         frame = frame.view(np.int16).reshape(self.frame_height, self.frame_width)
@@ -58,7 +58,7 @@ class Ravi:
             if self.frame_nr<self.length:
                 self.frame_nr = int(self.cap.get(cv2.CAP_PROP_POS_FRAMES))
                 self.norming(frame)
-                self.draw_frame_counter()
+                #self.draw_frame_counter()
                 if ret:
                     self.show_write_video()
                 if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -67,7 +67,8 @@ class Ravi:
                 self.cap.release()
         self.close()
 
-ravi_a = Ravi('a', "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\Thermoaufnahmen\\Thermoaufnahmen071222\\071222a.ravi")
+ravi_a = Ravi('a', "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\Thermoaufnahmen\\Thermoaufnahmen071222\\071222a.ravi")#071222f.ravi
+ravi_f = Ravi('f', "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\Thermoaufnahmen\\Thermoaufnahmen071222\\071222f.ravi")#071222f.ravi
 
-ravi_a.process_Video()
-
+ravi_f.process_Video()
+#ravi_a .process_Video()

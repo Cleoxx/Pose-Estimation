@@ -28,12 +28,12 @@ df_dif_RGB_IR = df_RGB.subtract(df_IR)
 
 for bp in Video.body_parts:
     #np.sqrt(np.sum(df_dif_RGB_IR[['NOSE_x','NOSE_y']]**2,axis=1))
-    np.sqrt(np.sum(df_dif_RGB_IR[[bp+"_x", bp+"_y", bp+"_z", bp+"_visibility"]]**2,axis=1))
-
+    df_rmse = np.sqrt(np.sum(df_dif_RGB_IR[[bp+"_x", bp+"_y", bp+"_z", bp+"_visibility"]]**2,axis=1))
+"""
 # von RGB und IR BW 
 df_dif_RGB_IR_BW = df_RGB.subtract(df_IR_BW)
 df_dif_RGB_IR_BW = df_dif_RGB_IR_BW.abs()
-
+"""
 
 #################
 # Auswertung
@@ -44,7 +44,8 @@ df_dif_RGB_IR_BW = df_dif_RGB_IR_BW.abs()
 #nlargest = print(df_dif_RGB_IR.nlargest(5, "NOSE_x", "all"))
 # hist = df_dif_RGB_IR.plot.hist()
 #max = print(df_dif_RGB_IR.max())
-T_RGB = df_dif_RGB_IR.T
-print(T_RGB)
+#T_RGB = df_dif_RGB_IR.T
+T_rmse = df_rmse.T
+print(T_rmse)
 #max_RGB = T_RGB.max()
 #print(max_RGB)
