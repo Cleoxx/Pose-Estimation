@@ -13,7 +13,6 @@ class Ravi:
     
     def __init__(self, spec, video_file):
         self.spec = spec
-        #self.palette = palette
         self.video_file = video_file
         #self.save_file = save_file
         
@@ -31,7 +30,7 @@ class Ravi:
         frame_roi = -frame_roi
         #self.draw_frame_counter()
         self.normed = cv2.normalize(frame_roi, None, 0, 255, cv2.NORM_MINMAX, cv2.CV_8U)
-        #return frame
+        return frame
         #return normed
         """
     def draw_frame_counter(self):
@@ -56,10 +55,9 @@ class Ravi:
         frame_nr = 0
         while self.cap.isOpened():
             ret, frame = self.cap.read()
-            if frame_nr<self.length:
+            if frame_nr < self.length:
                 frame_nr = int(self.cap.get(cv2.CAP_PROP_POS_FRAMES))
                 self.norming(frame)
-                #self.draw_frame_counter()
                 if ret:
                     self.show_write_video(frame_nr)
                 if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -67,9 +65,19 @@ class Ravi:
             else:
                 self.cap.release()
         self.close()
+        
+        
 
+ravi_a = Ravi('a', "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\Thermoaufnahmen\\Thermoaufnahmen071222\\071222a.ravi")
 ravi_b = Ravi('b', "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\Thermoaufnahmen\\Thermoaufnahmen071222\\071222b.ravi")
-#ravi_f = Ravi('f', "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\Thermoaufnahmen\\Thermoaufnahmen071222\\071222f.ravi")#071222f.ravi
+ravi_c = Ravi('c', "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\Thermoaufnahmen\\Thermoaufnahmen071222\\071222c.ravi")
+ravi_d = Ravi('d', "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\Thermoaufnahmen\\Thermoaufnahmen071222\\071222d.ravi")
+ravi_e = Ravi('e', "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\Thermoaufnahmen\\Thermoaufnahmen071222\\071222e.ravi")
+ravi_f = Ravi('f', "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\Thermoaufnahmen\\Thermoaufnahmen071222\\071222f.ravi")
 
-#ravi_f.process_Video()
+ravi_d.process_Video()
+ravi_a.process_Video()
 ravi_b.process_Video()
+ravi_c.process_Video()
+ravi_e.process_Video()
+ravi_f.process_Video()
