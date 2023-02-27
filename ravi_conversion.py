@@ -22,7 +22,8 @@ class Ravi:
         self.length = int(self.cap.get(cv2.CAP_PROP_FRAME_COUNT))
         frame_nr = int(self.cap.get(cv2.CAP_PROP_POS_FRAMES))
         fps = int(self.cap.get(cv2.CAP_PROP_FPS))
-        self.out = cv2.VideoWriter('C:\\Users\\User\\Desktop\\VideosEdited\\Ravi_bearbeitet\\Ravi_{}.mp4'.format(self.spec), cv2.VideoWriter_fourcc(*'avc1'), fps, (self.frame_width,self.frame_height), False)
+        self.out = cv2.VideoWriter('C:\\Users\\User\\Desktop\\VideosEdited\\Ravi_bearbeitet\\Ravi_{}.mp4'.format(self.spec), 
+        cv2.VideoWriter_fourcc(*'avc1'), fps, (self.frame_width,self.frame_height), False)
     def norming (self, frame):
         # Normalizing frame to range [0, 255], and get the result as type uint8 (this part is used just for making the data visible).
         frame = frame.view(np.int16).reshape(self.frame_height, self.frame_width)
@@ -32,15 +33,6 @@ class Ravi:
         self.normed = cv2.normalize(frame_roi, None, 0, 255, cv2.NORM_MINMAX, cv2.CV_8U)
         return frame
         #return normed
-        """
-    def draw_frame_counter(self):
-        cv2.rectangle(self.normed, (0,0), (225,73), (245,117,16), -1)
-        cv2.putText(self.normed, 'FRAME', (15,12), 
-                cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 1, cv2.LINE_AA)
-        cv2.putText(self.normed, str(self.frame_nr), (10,60), 
-                cv2.FONT_HERSHEY_SIMPLEX, 2, (255,255,255), 2, cv2.LINE_AA)
-        #print(int(self.cap.get(cv2.CAP_PROP_POS_FRAMES)))
-        """
     def show_write_video(self, frame_nr):
         cv2.imshow('ravi Video', self.normed)
         self.out.write(self.normed)
