@@ -18,6 +18,8 @@ class Video:
     def __init__(self, spec, video_file, csvfile):
         self.spec = spec
         self.video_file = video_file
+        #self.start_frame = start_frame
+        #self.end_frame = end_frame
         self.pose = Video.mp_pose.Pose(static_image_mode=False,
                                 model_complexity=2,
                                 enable_segmentation=True,
@@ -31,7 +33,10 @@ class Video:
         bp_csv_prep_fieldnames=[]
         csvfile = open(self.csvfile, 'w', newline='')
         for bp in Video.body_parts:
-            bp_csv_prep_fieldnames.extend([bp+"_x", bp+"_y", bp+"_z", bp+"_visibility"])
+            bp_csv_prep_fieldnames.extend([bp+"_x", bp+"_y", bp+"_z", bp+"_v"])
+            #bp_csv_prep_fieldnames.extend([bp+"_x", bp+"_y"])
+            #bp_csv_prep_fieldnames.extend([bp+"_v"])
+            #, bp+"_visibility"
         writer = csv.DictWriter(csvfile, fieldnames=bp_csv_prep_fieldnames)
         #print (bp_csv_prep_fieldnames)
         writer.writeheader()
@@ -67,6 +72,7 @@ class Video:
             bp_dict[bp_string+"_x"]=landmarks[bp.value].x
             bp_dict[bp_string+"_y"]=landmarks[bp.value].y
             bp_dict[bp_string+"_z"]=landmarks[bp.value].z
+            bp_dict[bp_string+"_v"]=landmarks[bp.value].visibility
             #self.plot([landmarks[bp.value].x, landmarks[bp.value].y, landmarks[bp.value].z])
         self.writer.writerow(bp_dict)
     def plot(self, pos):
@@ -96,6 +102,7 @@ class Video:
         while self.cap.isOpened():
             ret, frame = self.cap.read()
             if frame_nr<self.length:
+                #if (self.start_frame < frame_nr) and (frame_nr < self.end_frame): 
                 frame_nr+=1
                 results = self.image_detection(frame)
                 self.draw_landmarks(results, frame)
@@ -105,7 +112,7 @@ class Video:
                 except Exception as e:
                     print (e)
                     pass
-                self.draw_frame_counter(frame, frame_nr)
+                #self.draw_frame_counter(frame, frame_nr)
                 if ret:
                     self.show_write_video(frame)
                 if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -116,23 +123,36 @@ class Video:
         #print(length)
         #pprint.pprint(FrameDataAll)       
 
+######
+#cut to frames
+######
+
+Video_RGB = Video('RGB', "C:\\Users\\User\\Desktop\\VideosEdited\\071222a.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_RGBvis.csv")#071222a.mp4, TEST_RGBa.mp4
+#Colorized_Mask = Video('Col_M', "C:\\Users\\User\\Desktop\\VideosEdited\\Ravi_colorized\\Mask.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_Mask.csv")
+#Colorized_NoMask = Video('Col_NoM', "C:\\Users\\User\\Desktop\\VideosEdited\\Ravi_colorized\\Colorized_nomask.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_NoMask.csv")
+
+#Normalized = Video('Norm', "C:\\Users\\User\\Desktop\\VideosEdited\\Ravi_bearbeitet\\Ravi_a.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_Normvis.csv")
+#Raw = Video('Raw', "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\Thermoaufnahmen\\Thermoaufnahmen071222\\071222a.ravi", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_Raw.csv")
+
+#Normalized.process_Video()
+#Raw.process_Video()
 
 
-#Video_RGB = Video('RGB', "C:\\Users\\User\\Desktop\\VideosEdited\\071222a.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_RGB.csv")#071222a.mp4, TEST_RGBa.mp4
-#Video_IR = Video('IR', "C:\\Users\\User\\Desktop\\VideosEdited\\ir071222ath.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_IR.csv")#ir071222ath.mp4, TEST_IRa.mp4
-#Video_IR_BW = Video('IR_BW', "C:\\Users\\User\\Desktop\\VideosEdited\\071222athBW", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_IR_BW.csv")#071222athBW, TEST_BW.mp4
-#Video_IR_RED = Video('IR_RED', "C:\\Users\\User\\Desktop\\VideosEdited\\ir071222athred.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_IR_RED.csv") #ir071222athred.mp4, TEST_RED.mp4
-#Video_IR_HC = Video('IR_HC', "C:\\Users\\User\\Desktop\\VideosEdited\\ir071222athHC.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_IR_HC.csv") #ir071222athHC.mp4, TEST_HC.mp4
+#Colorized_Mask.process_Video()
+#Colorized_NoMask.process_Video()
 
-Colorized_Mask = Video('Col_M', "C:\\Users\\User\\Desktop\\VideosEdited\\Ravi_colorized\\Mask.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_Mask.csv")
-Colorized_NoMask = Video('Col_NoM', "C:\\Users\\User\\Desktop\\VideosEdited\\Ravi_colorized\\Colorized_nomask.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_NoMask.csv")
-
-
-Colorized_Mask.process_Video()
-Colorized_NoMask.process_Video()
-
-#Video_RGB.process_Video()
-#Video_IR.process_Video()
-#Video_IR_BW.process_Video()
-#Video_IR_RED.process_Video()
-#Video_IR_HC.process_Video()
+Video_RGB.process_Video()
+'''
+Video_RGB_a = Snapshot(606 , 2637, 'a', 15, "C:\\Users\\User\\Desktop\\VideosEdited\\071222a.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\train_data\\")
+Video_IR_a = Snapshot(448, 2601, 'a', 16, "C:\\Users\\User\\Desktop\\VideosEdited\\Ravi_bearbeitet\\Ravi_a.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\train_data\\bandw\\")
+Video_RGB_b = Snapshot(308 , 2072, 'b', 15, "C:\\Users\\User\\Desktop\\VideosEdited\\071222b.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\train_data\\")
+Video_IR_b = Snapshot(355, 2225, 'b', 16, "C:\\Users\\User\\Desktop\\VideosEdited\\Ravi_bearbeitet\\Ravi_b.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\train_data\\bandw\\")
+Video_RGB_c = Snapshot(378 , 1748, 'c', 15, "C:\\Users\\User\\Desktop\\VideosEdited\\071222c.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\train_data\\")
+Video_IR_c = Snapshot(304, 1763, 'c', 16, "C:\\Users\\User\\Desktop\\VideosEdited\\Ravi_bearbeitet\\Ravi_c.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\train_data\\bandw\\")
+Video_RGB_d = Snapshot(393 , 1621, 'd', 15, "C:\\Users\\User\\Desktop\\VideosEdited\\071222d.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\train_data\\")
+Video_IR_d = Snapshot(447, 1756, 'd', 16, "C:\\Users\\User\\Desktop\\VideosEdited\\Ravi_bearbeitet\\Ravi_d.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\train_data\\bandw\\")
+Video_RGB_e = Snapshot(204 , 1094, 'e', 15, "C:\\Users\\User\\Desktop\\VideosEdited\\071222e.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\train_data\\")
+Video_IR_e = Snapshot(263, 1207, 'e', 16, "C:\\Users\\User\\Desktop\\VideosEdited\\Ravi_bearbeitet\\Ravi_e.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\train_data\\bandw\\")
+Video_RGB_f = Snapshot(285 , 1403, 'f', 15, "C:\\Users\\User\\Desktop\\VideosEdited\\071222f.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\train_data\\")
+Video_IR_f = Snapshot(280, 1457, 'f', 16, "C:\\Users\\User\\Desktop\\VideosEdited\\Ravi_bearbeitet\\Ravi_f.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\train_data\\bandw\\")
+'''
