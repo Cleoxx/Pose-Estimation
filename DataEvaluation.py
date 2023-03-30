@@ -2,6 +2,7 @@ import cv2 as cv
 import mediapipe as mp
 import numpy as np
 import pandas as pd
+from sklearn.datasets import load_iris
 #from sklearn.metrics import r2_score, mean_squared_error
 
 ###################
@@ -12,54 +13,58 @@ body_parts = ('NOSE','LEFT_EYE_INNER','LEFT_EYE','LEFT_EYE_OUTER','RIGHT_EYE_INN
             'RIGHT_SHOULDER','LEFT_ELBOW','RIGHT_ELBOW','LEFT_WRIST','RIGHT_WRIST','LEFT_PINKY','RIGHT_PINKY',
             'LEFT_INDEX','RIGHT_INDEX','LEFT_THUMB','RIGHT_THUMB','LEFT_HIP','RIGHT_HIP','LEFT_KNEE','RIGHT_KNEE',
             'LEFT_ANKLE','RIGHT_ANKLE','LEFT_HEEL','RIGHT_HEEL','LEFT_FOOT_INDEX','RIGHT_FOOT_INDEX')
+'''
+df_RGB = pd.read_csv('C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_RGBxy.csv')
+df_raw = pd.read_csv('C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_Rawxy.csv')
+df_norm = pd.read_csv('C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_Normxy.csv')
+df_mask = pd.read_csv('C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_Maskxy.csv')
 
-df_RGB = pd.read_csv('C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_RGB.csv')
-#df_IR = pd.read_csv('C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_IR.csv')
-#df_IR_BW = pd.read_csv('C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_IR_BW.csv')
-#df_IR_RED = pd.read_csv('C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_IR_RED.csv')
-#df_IR_HC = pd.read_csv('C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_IR_HC.csv')
+#print(df_RGB)
+'''
 
-df_raw = pd.read_csv('C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_Raw.csv')
+#df_rgb_image = pd.read_csv('C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_rgbimagexyv.csv')
+#df_OArt = pd.read_csv('C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_Oartisticxyv.csv')
 
-print(df_RGB)
+df_rgb_image = pd.read_csv('C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_rgbimagexy.csv')
+df_art = pd.read_csv('C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_art2xy.csv')
+df_norm = pd.read_csv('C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_normxy.csv')
+df_stable = pd.read_csv('C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_stablexy.csv')
+df_Oart = pd.read_csv('C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_Oartxy.csv')
+df_bad_art = pd.read_csv('C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_bad_art2xy.csv')
+###############
+# Dif and Norm 
+################
+'''
+df_dif_RGB_raw = df_RGB.subtract(df_raw)
+df_dif_RGB_norm = df_RGB.subtract(df_norm)
+df_dif_RGB_mask= df_RGB.subtract(df_mask)
+'''
+df_dif_RGB_art= df_rgb_image.subtract(df_bad_art)
+
+#print(df_dif_RGB_raw)
+#print(df_dif_RGB_raw)
+
 
 ###############
-# DIF und Betrag 
+#column wise rmse
+###############
+#df_rmse_xy_mask = np.sqrt(np.sum(np.square(df_dif_RGB_mask)))
+df_rmse_xy_art = np.sqrt(np.sum(np.square(df_dif_RGB_art)))
+#df_rmse_xy_raw = np.sqrt(np.sum(np.square(df_dif_RGB_raw)))
+
+#mean_mask = df_rmse_xy_mask.mean()
+mean_art = df_rmse_xy_art.mean()
+#mean_norm = df_rmse_xyv_raw.mean()
+
+#################
+#Display
 ################
-# von RGB und IR 
-#df_dif_RGB_IR = df_RGB.subtract(df_IR)
-df_dif_RGB_raw = df_RGB.subtract(df_raw)
 
-for bp in body_parts:
-    header = bp+"_x", bp+"_y", bp+"_z"
-#Normed Difference
 
-for i in range(0,99):
-    #np.sqrt(np.sum(df_dif_RGB_IR[['NOSE_x','NOSE_y']]**2,axis=1))
-    for bp in body_parts:
-        df_rmse = np.sqrt(np.sum(df_dif_RGB_raw[[bp+"_x", bp+"_y", bp+"_z"]]**2,axis=i))
-        pd.df_rmse.to_csv (path_or_buf="C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\PD_DF_{}.csv".format(i)) 
-    i+=1
-    #, na_rep = '0', columns=99, header = header
-    #, bp+"_visibility"
-"""
-# von RGB und IR BW 
-df_dif_RGB_IR_BW = df_RGB.subtract(df_IR_BW)
-df_dif_RGB_IR_BW = df_dif_RGB_IR_BW.abs()
-"""
 
-#################
-# Auswertung
-#################
-#min = print(df_dif_RGB_IR.min(0))
-#imin = print(df_dif_RGB_IR.idxmin(0))
-#imax = print(df_dif_RGB_IR.idxmax())
-#nlargest = print(df_dif_RGB_IR.nlargest(5, "NOSE_x", "all"))
-# hist = df_dif_RGB_IR.plot.hist()
-#max = print(df_dif_RGB_IR.max())
-#T_RGB = df_dif_RGB_IR.T
-T_rmse = df_rmse.T
-print(T_rmse)
+print(df_rmse_xy_art.to_markdown())
+print(mean_art)
 
-#max_RGB = T_RGB.max()
-#print(max_RGB)
+
+
+###############
