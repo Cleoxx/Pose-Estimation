@@ -4,10 +4,11 @@ import csv
 from pathlib import Path
 import os 
 from os import listdir
-#import glob
-#import matplotlib.pyplot as plt
-#creating landmark csv from images
-#IMAGE_FILES = []
+from sys import argv
+
+#creating landmark csv from images instead of videos 
+#training image for DeOldify are used 
+
 class Image:
     body_parts = ('NOSE','LEFT_EYE_INNER','LEFT_EYE','LEFT_EYE_OUTER','RIGHT_EYE_INNER',
                 'RIGHT_EYE','RIGHT_EYE_OUTER','LEFT_EAR','RIGHT_EAR','MOUTH_LEFT','MOUTH_RIGHT','LEFT_SHOULDER',
@@ -20,10 +21,8 @@ class Image:
 
     
 
-    def __init__(self, spec, mod, length, img_file, csvfile):
+    def __init__(self, spec, img_file, csvfile):
         self.spec = spec
-        self.mod = mod
-        self.length = length
         self.img_file = img_file
         self.pose = Image.mp_pose.Pose(static_image_mode=True,
                                 model_complexity=2,
@@ -39,72 +38,32 @@ class Image:
         csvfile = open(self.csvfile, 'w', newline='')
         for bp in Image.body_parts:
             self.bp_csv_prep_fieldnames.extend([bp+"_v"])
-            #, bp+"_z", bp+"_visibility"
-            #, bp+"_v"
-            #bp+"_x", bp+"_y", 
+            #bp+"_x", bp+"_y"
         writer = csv.DictWriter(csvfile, fieldnames=self.bp_csv_prep_fieldnames)
-        #print (bp_csv_prep_fieldnames)
         writer.writeheader()
         self.writer=writer
-    #def load_image(self):
-        #for idx, self.image_name in enumerate(self.img_file):
-        #for i in range (0,2):
-        #self.image_name = self.img_file + '\\TrainImg_{}_{}.jpg'.format(self.mod, i)
-        #self.img = cv2.imread(self.image_name)
-        #print(self.img_file)
-        #print(self.image_name)
-        #image_height, image_width, _ = self.img.shape
-        #i +=1
-        #self.results = self.pose.process(self.img)
-        #self.results = self.pose.process(self.img)
-        #self.results = self.pose.process(cv2.cvtColor(self.img, cv2.COLOR_BGR2RGB))
-        #self.length = len([IMAGE_FILES])
-        #return results
     def draw_landmarks(self):
-        #self.annotated_image = self.img.copy()
         self.mp_drawing.draw_landmarks(self.annotated_image, self.results.pose_landmarks, self.mp_pose.POSE_CONNECTIONS,
                                 self.mp_drawing.DrawingSpec(color=(245,117,66), thickness=2, circle_radius=2), 
                                 self.mp_drawing.DrawingSpec(color=(245,66,230), thickness=2, circle_radius=2) 
                                     )
-        #self.mp_drawing.draw_landmarks(
-        #self.annotated_image, self.results.pose_landmarks,
-        #self.mp_pose.POSE_CONNECTIONS,
-        #landmark_drawing_spec=self.mp_drawing_styles.get_default_pose_landmarks_style())
     def extract_landmarks(self):
         landmarks=self.results.pose_landmarks.landmark
         return landmarks
-    #def writerow(self, landmarks):
-        #bp_dict={}
-        
-            #bp_dict[bp_string+"_z"]=landmarks[bp.value].z
-            #bp_dict[bp_string+"_v"]=landmarks[bp.value].visibility
-            #self.plot([landmarks[bp.value].x, landmarks[bp.value].y, landmarks[bp.value].z])
-        #self.writer.writerow(bp_dict)
     def show_write_img(self, i):
-        #self.out.write(frame)
-        self.out = cv2.imwrite('C:/Users/User/Desktop/VideosEdited/Output_Images/{}_{}_Landmarks.png'.format(self.mod, i), self.annotated_image)
-        #cv2.imwrite('/tmp/annotated_image' + str(idx) + '.png', annotated_image)
+        self.out = cv2.imwrite('C:/Users/User/Desktop/VideosEdited/Output_Images/{}_{}_Landmarks.png'.format(self.spec, i), self.annotated_image)
         cv2.imshow('Mediapipe Feed', self.annotated_image)
-        #Image.mp_drawing.plot_landmarks(self.results.pose_world_landmarks, mp_pose.POSE_CONNECTIONS)
     def process_Image(self):
         i = 0
         path = self.img_file
         files = os.listdir(path)
         bp_dict={}
         for image in files:
-            # make sure file is an image
             if image.endswith(('.jpg')):
-                print(i)
                 img_name = path + image
-                print(img_name)
-                #for i in range (0, (self.length - 1)):
-                #self.image_name = self.img_file + '\\TrainImg_{}_{}.jpg'.format(self.mod, i)
                 img = cv2.imread(img_name)
-                #image_height, image_width, _ = img.shape
                 self.results = self.pose.process(img)
-                #self.results = self.pose.process(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
                 self.annotated_image = img.copy()
-                #self.load_image()
                 self.draw_landmarks()
                 try:
                     landmarks = self.extract_landmarks()
@@ -120,74 +79,19 @@ class Image:
                             #bp_dict[bp_string+"_x"]=0
                             #bp_dict[bp_string+"_y"]=0
                             bp_dict[bp_string+"_v"]=0
-                    #self.writer.writerow(bp_dict)
-                    #continue
                 finally:
-                    #csvfile = open(self.csvfile, 'w', newline='')
-                    #self.writer = csv.DictWriter(csvfile, fieldnames=self.bp_csv_prep_fieldnames)
                     self.writer.writerow(bp_dict) 
-                    self.out = cv2.imwrite('C:/Users/User/Desktop/VideosEdited/Output_Images/{}_{}_Landmarks.png'.format(self.spec, i), self.annotated_image)
                     i += 1
 
+######
+#select videos 
+######
 
-art_image = Image('art', 'a', 134,"C:/Users/User/Documents/Masterstudium/Masterarbeit/Pose-Estimation_own/DeOldify/result_images/Artistic2/", "C:/Users/User/Documents/Masterstudium/Masterarbeit/Pose-Estimation_own/Landmark CSV/Landmarks_art2v.csv")
-art_image.process_Image()
-
-Oart_image = Image('Oart', 'a', 134,"C:/Users/User/Documents/Masterstudium/Masterarbeit/Pose-Estimation_own/DeOldify/result_images/Original_Artistic/", "C:/Users/User/Documents/Masterstudium/Masterarbeit/Pose-Estimation_own/Landmark CSV/Landmarks_Oartv.csv")
-Oart_image.process_Image()
-
-bad_art_image = Image('bad_art', 'a', 134,"C:/Users/User/Documents/Masterstudium/Masterarbeit/Pose-Estimation_own/DeOldify/result_images/Artistic/", "C:/Users/User/Documents/Masterstudium/Masterarbeit/Pose-Estimation_own/Landmark CSV/Landmarks_bad_art2v.csv")
-bad_art_image.process_Image()
-
-stable_image = Image('stable', 'a', 134,"C:/Users/User/Documents/Masterstudium/Masterarbeit/Pose-Estimation_own/DeOldify/result_images/Stable_Test/", "C:/Users/User/Documents/Masterstudium/Masterarbeit/Pose-Estimation_own/Landmark CSV/Landmarks_stablev.csv")
-stable_image.process_Image()
-
-norm_image = Image('norm', 'a', 134, "C:/Users/User/Documents/Masterstudium/Masterarbeit/TestPics/train_data1/bandw/", "C:/Users/User/Documents/Masterstudium/Masterarbeit/Pose-Estimation_own/Landmark CSV/Landmarks_normv.csv")
-norm_image.process_Image()
-
-rgb_image = Image('rgb', 'a', 134, "C:/Users/User/Documents/Masterstudium/Masterarbeit/TestPics/train_data1/", "C:/Users/User/Documents/Masterstudium/Masterarbeit/Pose-Estimation_own/Landmark CSV/Landmarks_rgbimagev.csv")
-rgb_image.process_Image()
-'''
-b_art_image = Image('art', 'b', 117,'C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\DeOldify\\result_images\\Artistic2', "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_art2xy.csv")
-b_art_image.process_Image()
-c_art_image = Image('art', 'c', 91,'C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\DeOldify\\result_images\\Artistic2', "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_art2xy.csv")
-c_art_image.process_Image()
-d_art_image = Image('art', 'd', 82,'C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\DeOldify\\result_images\\Artistic2', "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_art2xy.csv")
-d_art_image.process_Image()
-e_art_image = Image('art', 'e', 59,'C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\DeOldify\\result_images\\Artistic2', "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_art2xy.csv")
-e_art_image.process_Image()
-f_art_image = Image('art', 'f', 74,'C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\DeOldify\\result_images\\Artistic2', "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_art2xy.csv")
-f_art_image.process_Image()
-'''
-
-'''
-a_norm_image = Image('norm', 'a', 134,'C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\train_data1\\bandw', "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_normimagexy.csv")
-a_norm_image.process_Image()
-b_norm_image = Image('norm', 'b', 117,'C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\train_data1\\bandw', "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_normimagexy.csv")
-b_norm_image.process_Image()
-c_norm_image = Image('norm', 'c', 91,'C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\train_data1\\bandw', "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_normimagexy.csv")
-c_norm_image.process_Image()
-d_norm_image = Image('norm', 'd', 82,'C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\train_data1\\bandw', "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_normimagexy.csv")
-d_norm_image.process_Image()
-e_norm_image = Image('norm', 'e', 59,'C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\train_data1\\bandw', "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_normimagexy.csv")
-e_norm_image.process_Image()
-f_norm_image = Image('norm', 'f', 74,'C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\train_data1\\bandw', "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_normimagexy.csv")
-f_norm_image.process_Image()
-'''
-
-'''
-a_rgb_image = Image('rgb', 'a', 134,'C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\train_data1', "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_rgbimagexy.csv")
-a_rgb_image.process_Image()
-
-b_rgb_image = Image('rgb', 'b', 117,'C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\train_data1', "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_rgbimagexy.csv")
-b_rgb_image.process_Image()
-c_rgb_image = Image('rgb', 'c', 91,'C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\train_data1', "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_rgbimagexy.csv")
-c_rgb_image.process_Image()
-d_rgb_image = Image('rgb', 'd', 82,'C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\train_data1', "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_rgbimagexy.csv")
-d_rgb_image.process_Image()
-e_rgb_image = Image('rgb', 'e', 59,'C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\train_data1', "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_rgbimagexy.csv")
-e_rgb_image.process_Image()
-f_rgb_image = Image('rgb', 'f', 74,'C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\train_data1', "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\Pose-Estimation_own\\Landmark CSV\\Landmarks_rgbimagexy.csv")
-f_rgb_image.process_Image()
-
-'''
+# If cmdline arguments not specified, use default videos
+art_image = ['art',"C:/Users/User/Documents/Masterstudium/Masterarbeit/Pose-Estimation_own/DeOldify/result_images/Artistic3/", "C:/Users/User/Documents/Masterstudium/Masterarbeit/Pose-Estimation_own/Landmark CSV/Landmarks_artv.csv"]
+if len(argv) != 4:
+    art_image = Image(*art_image)
+    art_image.process_Image()
+else:
+    Im = Image(*argv[1:4])
+    Im.process_Image()

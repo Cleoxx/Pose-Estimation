@@ -45,30 +45,25 @@ class Snapshot:
                 self.cap.release()
                 frame_nr = 0
         cv2.destroyAllWindows()
-        
-        
+'''
+##########
+Instructions:
+Edit this section to enter new videos to be cut and individual frames saved as images. 
+Parameters:
+1. start_frame: starting frame for the video to be cut from 
+2. end_frame: last frame for the video to be cut to
+3. spec: specification or name of the video to be distinguished from the other videos, if multiple are being processed
+4. mod: depending on the fps. 15 for the RGB-video, 16 for the IR-video due to the different fps rate of the video recording (30 and 32 fps), to ensure equivalent frames.
+5. video_file: path of the video
+6. save_path: path to the folder, where resulting images will be saved
+##########
+'''
 Video_RGB_a = Snapshot(606 , 2637, 'a', 15, "C:\\Users\\User\\Desktop\\VideosEdited\\071222a.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\train_data\\")
 Video_IR_a = Snapshot(448, 2601, 'a', 16, "C:\\Users\\User\\Desktop\\VideosEdited\\Ravi_bearbeitet\\Ravi_a.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\train_data\\bandw\\")
 Video_RGB_b = Snapshot(308 , 2072, 'b', 15, "C:\\Users\\User\\Desktop\\VideosEdited\\071222b.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\train_data\\")
 Video_IR_b = Snapshot(355, 2225, 'b', 16, "C:\\Users\\User\\Desktop\\VideosEdited\\Ravi_bearbeitet\\Ravi_b.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\train_data\\bandw\\")
-Video_RGB_c = Snapshot(378 , 1748, 'c', 15, "C:\\Users\\User\\Desktop\\VideosEdited\\071222c.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\train_data\\")
-Video_IR_c = Snapshot(304, 1763, 'c', 16, "C:\\Users\\User\\Desktop\\VideosEdited\\Ravi_bearbeitet\\Ravi_c.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\train_data\\bandw\\")
-Video_RGB_d = Snapshot(393 , 1621, 'd', 15, "C:\\Users\\User\\Desktop\\VideosEdited\\071222d.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\train_data\\")
-Video_IR_d = Snapshot(447, 1756, 'd', 16, "C:\\Users\\User\\Desktop\\VideosEdited\\Ravi_bearbeitet\\Ravi_d.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\train_data\\bandw\\")
-Video_RGB_e = Snapshot(204 , 1094, 'e', 15, "C:\\Users\\User\\Desktop\\VideosEdited\\071222e.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\train_data\\")
-Video_IR_e = Snapshot(263, 1207, 'e', 16, "C:\\Users\\User\\Desktop\\VideosEdited\\Ravi_bearbeitet\\Ravi_e.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\train_data\\bandw\\")
-Video_RGB_f = Snapshot(285 , 1403, 'f', 15, "C:\\Users\\User\\Desktop\\VideosEdited\\071222f.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\train_data\\")
-Video_IR_f = Snapshot(280, 1457, 'f', 16, "C:\\Users\\User\\Desktop\\VideosEdited\\Ravi_bearbeitet\\Ravi_f.mp4", "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\train_data\\bandw\\")
 
 Video_RGB_a.produce_snapshots()
 Video_IR_a.produce_snapshots()
 Video_RGB_b.produce_snapshots()
 Video_IR_b.produce_snapshots()
-Video_RGB_c.produce_snapshots()
-Video_IR_c.produce_snapshots()
-Video_RGB_d.produce_snapshots()
-Video_IR_d.produce_snapshots()
-Video_RGB_e.produce_snapshots()
-Video_IR_e.produce_snapshots()
-Video_RGB_f.produce_snapshots()
-Video_IR_f.produce_snapshots()
