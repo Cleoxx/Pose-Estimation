@@ -32,3 +32,8 @@ DataEvaluation.py:
 - differences between the coordinates of two dataframes are built
 - RSME of these differences is calculated over each column 
 - a mean value is displayed along with the RSME
+
+
+ravi_conversion.py:
+- converting .ravi formatted videos into .mp4
+- 

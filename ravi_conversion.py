@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 import os
-
+from sys import argv
 
 ########
 # This class creates a .ravi - Video Object
@@ -11,7 +11,8 @@ import os
 
 class Ravi:
     
-    def __init__(self, spec, video_file):
+    def __init__(self, spec, video_file, save_path):
+        self.save_path = save_path
         self.spec = spec
         self.video_file = video_file
         #self.save_file = save_file
@@ -22,7 +23,7 @@ class Ravi:
         self.length = int(self.cap.get(cv2.CAP_PROP_FRAME_COUNT))
         frame_nr = int(self.cap.get(cv2.CAP_PROP_POS_FRAMES))
         fps = int(self.cap.get(cv2.CAP_PROP_FPS))
-        self.out = cv2.VideoWriter('C:\\Users\\User\\Desktop\\VideosEdited\\Ravi_bearbeitet\\Ravi_{}.mp4'.format(self.spec), 
+        self.out = cv2.VideoWriter(self.save_path + '\\Ravi_{}.mp4'.format(self.spec), 
         cv2.VideoWriter_fourcc(*'avc1'), fps, (self.frame_width,self.frame_height), False)
     def norming (self, frame):
         # Normalizing frame to range [0, 255], and get the result as type uint8 (this part is used just for making the data visible).
@@ -59,17 +60,10 @@ class Ravi:
         self.close()
         
         
-
-ravi_a = Ravi('a', "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\Thermoaufnahmen\\Thermoaufnahmen071222\\071222a.ravi")
-ravi_b = Ravi('b', "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\Thermoaufnahmen\\Thermoaufnahmen071222\\071222b.ravi")
-ravi_c = Ravi('c', "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\Thermoaufnahmen\\Thermoaufnahmen071222\\071222c.ravi")
-ravi_d = Ravi('d', "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\Thermoaufnahmen\\Thermoaufnahmen071222\\071222d.ravi")
-ravi_e = Ravi('e', "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\Thermoaufnahmen\\Thermoaufnahmen071222\\071222e.ravi")
-ravi_f = Ravi('f', "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\Thermoaufnahmen\\Thermoaufnahmen071222\\071222f.ravi")
-
-ravi_d.process_Video()
-ravi_a.process_Video()
-ravi_b.process_Video()
-ravi_c.process_Video()
-ravi_e.process_Video()
-ravi_f.process_Video()
+params = ['a', "C:\\Users\\User\\Documents\\Masterstudium\\Masterarbeit\\TestPics\\Thermoaufnahmen\\Thermoaufnahmen071222\\071222a.ravi", "C:\\Users\\User\\Desktop\\VideosEdited\\Ravi_bearbeitet"]
+if len(argv) != 4:
+    Video = Ravi(*params)
+    Video.process_Video()
+else:
+    Vid = Ravi(*argv[1:4])
+    Vid.process_Video()
